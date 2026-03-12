@@ -46,25 +46,28 @@
             font-weight: bold;
             position: fixed;
             z-index: 100;
-            transition: transform 0.1s;
         }
 
+        /* Container for the Cake Image */
         #cake-container {
             display: none;
             position: relative;
             width: 100%;
+            min-height: 200px; /* Ensure space for the image */
             cursor: crosshair;
         }
 
         .kawaii-cake {
             width: 100%;
+            height: auto;
+            display: block;
             border-radius: 20px;
             filter: drop-shadow(0 0 10px rgba(160, 216, 255, 0.3));
         }
 
         .candle {
             position: absolute;
-            font-size: 1.8rem;
+            font-size: 2rem;
             transform: translate(-50%, -100%);
             z-index: 10;
             animation: popIn 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
@@ -104,7 +107,7 @@
         <span id="status-text">Tap the button 20 times...</span>
         
         <div id="cake-container" onclick="placeCandle(event)">
-            <img src="cake.jpg" class="kawaii-cake" alt="Kawaii Cake">
+            <img src="cake.jpg" class="kawaii-cake" id="cakeImg">
             <div id="candle-layer"></div>
         </div>
 
@@ -122,6 +125,7 @@
         const candleLayer = document.getElementById('candle-layer');
         const finalPhoto = document.getElementById('final-photo');
         
+        // Final surprise photo source
         const photoSource = "IMG_20260312_071341.jpg";
 
         window.onload = () => {
@@ -197,7 +201,7 @@
                 el.style.border = '2px solid white';
                 el.style.objectFit = 'cover';
             } else {
-                el.innerText = ["💙", "✨", "🎉", "💎", "🌸"][Math.floor(Math.random() * 5)];
+                el.innerText = ["💙", "✨", "🎉", "💎", "🌸"][Math.floor(Math.random() * 4)];
                 el.style.fontSize = '24px';
             }
 
