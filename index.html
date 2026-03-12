@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Happy Birthday!</title>
+    <title>Happy Birthday Dhanabells!</title>
     <style>
         body {
             margin: 0;
@@ -11,69 +11,90 @@
             justify-content: center;
             align-items: center;
             min-height: 100vh;
-            background: #0f0c29;
-            background: linear-gradient(to right, #24243e, #302b63, #0f0c29);
-            font-family: 'Arial', sans-serif;
+            background: #05192d;
+            background: radial-gradient(circle at center, #103a61 0%, #05192d 100%);
+            font-family: 'Poppins', sans-serif;
             overflow: hidden;
             color: white;
         }
 
         .card {
-            background: rgba(255, 255, 255, 0.1);
-            backdrop-filter: blur(15px);
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(20px);
             padding: 40px;
-            border-radius: 30px;
+            border-radius: 40px;
             text-align: center;
-            border: 1px solid rgba(255, 255, 255, 0.2);
-            box-shadow: 0 15px 35px rgba(0,0,0,0.5);
-            max-width: 320px;
+            border: 1px solid rgba(160, 216, 255, 0.2);
+            box-shadow: 0 30px 60px rgba(0,0,0,0.5);
+            width: 320px;
             z-index: 5;
+            position: relative;
         }
 
-        h1 { font-size: 2rem; margin-bottom: 10px; }
-        #counter { font-size: 1.2rem; color: #ffbd39; font-weight: bold; }
+        h1 { font-size: 1.8rem; color: #a0d8ff; margin-bottom: 5px; }
+        #status-text { font-size: 0.9rem; color: #82ccff; margin-bottom: 25px; display: block; }
 
+        /* The Game Button */
         .btn {
-            background: #ff4d4d;
+            background: linear-gradient(135deg, #4682b4, #82ccff);
             color: white;
             border: none;
             padding: 15px 25px;
             font-size: 1rem;
             border-radius: 50px;
             cursor: pointer;
-            box-shadow: 0 5px 15px rgba(255, 77, 77, 0.4);
-            transition: all 0.2s ease-out;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.3);
             font-weight: bold;
             position: fixed;
             z-index: 100;
+            transition: transform 0.1s;
         }
 
-        /* Styles for the floating photos */
-        .floating-photo {
+        /* --- THE KAWAII CAKE --- */
+        #cake-container {
+            display: none;
+            position: relative;
+            width: 100%;
+            cursor: crosshair;
+        }
+
+        .kawaii-cake {
+            width: 100%;
+            border-radius: 20px;
+            /* Filter to make it pop against the blue */
+            filter: drop-shadow(0 0 10px rgba(160, 216, 255, 0.3));
+        }
+
+        /* Interactive Candles */
+        .candle {
             position: absolute;
-            width: 80px;
-            height: 80px;
-            object-fit: cover;
-            border-radius: 10px;
-            border: 2px solid white;
-            pointer-events: none;
+            font-size: 1.8rem;
+            transform: translate(-50%, -100%);
             z-index: 10;
+            animation: popIn 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            filter: drop-shadow(0 0 8px #ffbd39);
         }
 
-        /* The Grand Reveal Photo */
+        /* Final Surprise Image */
         #final-photo {
             display: none;
-            width: 200px;
-            height: auto;
-            border-radius: 20px;
-            border: 5px solid #ffbd39;
-            margin-top: 20px;
-            animation: popIn 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            width: 240px;
+            border-radius: 25px;
+            border: 4px solid #a0d8ff;
+            margin-top: 15px;
+            box-shadow: 0 0 30px rgba(160, 216, 255, 0.4);
+        }
+
+        /* Floating Celebrations */
+        .floating-element {
+            position: absolute;
+            pointer-events: none;
+            z-index: 10;
+            animation: floatUp 4s linear forwards;
         }
 
         @keyframes floatUp {
-            0% { transform: translateY(0) rotate(0deg); opacity: 1; }
-            100% { transform: translateY(-120vh) rotate(360deg); opacity: 0; }
+            to { transform: translateY(-120vh) rotate(360deg); opacity: 0; }
         }
 
         @keyframes popIn {
@@ -86,77 +107,115 @@
 
     <div class="card" id="mainCard">
         <h1 id="title">Catch the Gift! 🎁</h1>
-        <div id="counter">Taps left: 20</div>
-        <p id="message">Dhanabells is waiting...</p>
-        <img src="1000002428.jpg" id="final-photo" alt="Birthday Photo">
+        <span id="status-text">Tap the button 20 times...</span>
+        
+        <div id="cake-container" onclick="placeCandle(event)">
+            <img src="cake_design.png" class="kawaii-cake" alt="Kawaii Cake">
+            <div id="candle-layer"></div>
+        </div>
+
+        <img src="IMG_20260312_071341.jpg" id="final-photo">
     </div>
 
     <button class="btn" id="targetBtn" onclick="handleTap()">TAP DHANABELLS 🎉</button>
 
     <script>
-        let taps = 20;
+        let tapCount = 20;
+        let candlesPlaced = 0;
         const btn = document.getElementById('targetBtn');
-        const counterDisplay = document.getElementById('counter');
+        const statusText = document.getElementById('status-text');
+        const cakeContainer = document.getElementById('cake-container');
+        const candleLayer = document.getElementById('candle-layer');
         const finalPhoto = document.getElementById('final-photo');
-
-        // This is your image filename
+        
+        // --- FILE NAMES ---
+        // 1. Save your Kawaii Cake image as "cake_design.png"
+        // 2. Your birthday photo is "IMG_20260312_071341.jpg"
         const photoSource = "IMG_20260312_071341.jpg";
 
         window.onload = () => {
             btn.style.left = (window.innerWidth / 2 - btn.offsetWidth / 2) + 'px';
-            btn.style.top = (window.innerHeight / 2 + 100) + 'px';
+            btn.style.top = (window.innerHeight / 2 + 130) + 'px';
         };
 
         function moveButton() {
             const margin = 80; 
             const maxX = window.innerWidth - btn.offsetWidth - margin;
             const maxY = window.innerHeight - btn.offsetHeight - margin;
-            const randomX = Math.max(margin, Math.floor(Math.random() * maxX));
-            const randomY = Math.max(margin, Math.floor(Math.random() * maxY));
-            btn.style.left = randomX + 'px';
-            btn.style.top = randomY + 'px';
+            btn.style.left = Math.max(margin, Math.random() * maxX) + 'px';
+            btn.style.top = Math.max(margin, Math.random() * maxY) + 'px';
         }
 
         function handleTap() {
-            taps--;
-            if (taps > 0) {
-                counterDisplay.innerText = `Taps left: ${taps}`;
+            tapCount--;
+            if (tapCount > 0) {
+                statusText.innerText = `Keep going! ${tapCount} left...`;
                 moveButton();
             } else {
-                revealSurprise();
+                startCakePhase();
             }
         }
 
-        function revealSurprise() {
-            document.getElementById('title').innerText = "HAPPY BIRTHDAY!";
-            document.getElementById('message').innerText = "You caught it! Best wishes, Dhanabells! ✨";
-            counterDisplay.style.display = 'none';
+        function startCakePhase() {
             btn.style.display = 'none';
-            
-            // Show the main photo in the card
-            finalPhoto.style.display = "inline-block";
+            document.getElementById('title').innerText = "Make a Wish! 🕯️";
+            statusText.innerText = "Tap on the cake to light 5 candles!";
+            cakeContainer.style.display = 'block';
+        }
 
-            // Launch floating versions of the photo
-            for(let i=0; i<30; i++) {
-                setTimeout(createFloatingPhoto, i * 200);
+        function placeCandle(event) {
+            if (candlesPlaced < 5) {
+                candlesPlaced++;
+                const rect = cakeContainer.getBoundingClientRect();
+                const x = event.clientX - rect.left;
+                const y = event.clientY - rect.top;
+
+                const candle = document.createElement('div');
+                candle.className = 'candle';
+                candle.innerText = "🕯️";
+                candle.style.left = x + 'px';
+                candle.style.top = y + 'px';
+                candleLayer.appendChild(candle);
+
+                if (candlesPlaced === 5) {
+                    setTimeout(revealFinalSurprise, 1000);
+                }
             }
         }
 
-        function createFloatingPhoto() {
-            const img = document.createElement('img');
-            img.src = photoSource;
-            img.className = 'floating-photo';
-            img.style.left = Math.random() * 90 + 'vw';
-            img.style.bottom = '-100px';
+        function revealFinalSurprise() {
+            document.getElementById('title').innerText = "HAPPY BIRTHDAY!";
+            statusText.style.display = 'none';
+            cakeContainer.style.display = 'none';
+            finalPhoto.style.display = 'inline-block';
             
-            const size = Math.random() * 40 + 60;
-            img.style.width = size + 'px';
-            img.style.height = size + 'px';
+            for(let i=0; i<50; i++) {
+                setTimeout(createCelebration, i * 150);
+            }
+        }
+
+        function createCelebration() {
+            const isPhoto = Math.random() > 0.4;
+            const el = isPhoto ? document.createElement('img') : document.createElement('div');
             
-            img.style.animation = `floatUp ${Math.random() * 2 + 3}s linear forwards`;
-            
-            document.body.appendChild(img);
-            setTimeout(() => { img.remove(); }, 5000);
+            if (isPhoto) {
+                el.src = photoSource;
+                el.style.width = (Math.random() * 40 + 70) + 'px';
+                el.style.height = el.style.width;
+                el.style.borderRadius = '15px';
+                el.style.border = '2px solid white';
+                el.style.objectFit = 'cover';
+            } else {
+                el.innerText = ["💙", "✨", "🎉", "💎", "🌸"][Math.floor(Math.random() * 5)];
+                el.style.fontSize = '24px';
+            }
+
+            el.className = 'floating-element';
+            el.style.left = Math.random() * 95 + 'vw';
+            el.style.bottom = '-100px';
+            el.style.animation = `floatUp ${Math.random() * 2 + 3}s linear forwards`;
+            document.body.appendChild(el);
+            setTimeout(() => el.remove(), 5000);
         }
     </script>
 </body>
