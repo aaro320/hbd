@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Happy Birthday!</title>
+    <style>
+        body {
+            margin: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            background: #0f0c29;
+            background: linear-gradient(to right, #24243e, #302b63, #0f0c29);
+            font-family: 'Arial', sans-serif;
+            overflow: hidden;
+            color: white;
+        }
+
+        .card {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(15px);
+            padding: 40px;
+            border-radius: 30px;
+            text-align: center;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            box-shadow: 0 15px 35px rgba(0,0,0,0.5);
+            max-width: 320px;
+            z-index: 5;
+        }
+
+        h1 { font-size: 2rem; margin-bottom: 10px; }
+        #counter { font-size: 1.2rem; color: #ffbd39; font-weight: bold; }
+
+        .btn {
+            background: #ff4d4d;
+            color: white;
+            border: none;
+            padding: 15px 25px;
+            font-size: 1rem;
+            border-radius: 50px;
+            cursor: pointer;
+            box-shadow: 0 5px 15px rgba(255, 77, 77, 0.4);
+            transition: all 0.2s ease-out;
+            font-weight: bold;
+            position: fixed;
+            z-index: 100;
+        }
+
+        /* Styles for the floating photos */
+        .floating-photo {
+            position: absolute;
+            width: 80px;
+            height: 80px;
+            object-fit: cover;
+            border-radius: 10px;
+            border: 2px solid white;
+            pointer-events: none;
+            z-index: 10;
+        }
+
+        /* The Grand Reveal Photo */
+        #final-photo {
+            display: none;
+            width: 200px;
+            height: auto;
+            border-radius: 20px;
+            border: 5px solid #ffbd39;
+            margin-top: 20px;
+            animation: popIn 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+
+        @keyframes floatUp {
+            0% { transform: translateY(0) rotate(0deg); opacity: 1; }
+            100% { transform: translateY(-120vh) rotate(360deg); opacity: 0; }
+        }
+
+        @keyframes popIn {
+            from { transform: scale(0); opacity: 0; }
+            to { transform: scale(1); opacity: 1; }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="card" id="mainCard">
+        <h1 id="title">Catch the Gift! 🎁</h1>
+        <div id="counter">Taps left: 20</div>
+        <p id="message">Dhanabells is waiting...</p>
+        <img src="1000002428.jpg" id="final-photo" alt="Birthday Photo">
+    </div>
+
+    <button class="btn" id="targetBtn" onclick="handleTap()">TAP DHANABELLS 🎉</button>
+
+    <script>
+        let taps = 20;
+        const btn = document.getElementById('targetBtn');
+        const counterDisplay = document.getElementById('counter');
+        const finalPhoto = document.getElementById('final-photo');
+
+        // This is your image filename
+        const photoSource = "1000002428.jpg";
+
+        window.onload = () => {
+            btn.style.left = (window.innerWidth / 2 - btn.offsetWidth / 2) + 'px';
+            btn.style.top = (window.innerHeight / 2 + 100) + 'px';
+        };
+
+        function moveButton() {
+            const margin = 80; 
+            const maxX = window.innerWidth - btn.offsetWidth - margin;
+            const maxY = window.innerHeight - btn.offsetHeight - margin;
+            const randomX = Math.max(margin, Math.floor(Math.random() * maxX));
+            const randomY = Math.max(margin, Math.floor(Math.random() * maxY));
+            btn.style.left = randomX + 'px';
+            btn.style.top = randomY + 'px';
+        }
+
+        function handleTap() {
+            taps--;
+            if (taps > 0) {
+                counterDisplay.innerText = `Taps left: ${taps}`;
+                moveButton();
+            } else {
+                revealSurprise();
+            }
+        }
+
+        function revealSurprise() {
+            document.getElementById('title').innerText = "HAPPY BIRTHDAY!";
+            document.getElementById('message').innerText = "You caught it! Best wishes, Dhanabells! ✨";
+            counterDisplay.style.display = 'none';
+            btn.style.display = 'none';
+            
+            // Show the main photo in the card
+            finalPhoto.style.display = "inline-block";
+
+            // Launch floating versions of the photo
+            for(let i=0; i<30; i++) {
+                setTimeout(createFloatingPhoto, i * 200);
+            }
+        }
+
+        function createFloatingPhoto() {
+            const img = document.createElement('img');
+            img.src = photoSource;
+            img.className = 'floating-photo';
+            img.style.left = Math.random() * 90 + 'vw';
+            img.style.bottom = '-100px';
+            
+            const size = Math.random() * 40 + 60;
+            img.style.width = size + 'px';
+            img.style.height = size + 'px';
+            
+            img.style.animation = `floatUp ${Math.random() * 2 + 3}s linear forwards`;
+            
+            document.body.appendChild(img);
+            setTimeout(() => { img.remove(); }, 5000);
+        }
+    </script>
+</body>
+</html>
