@@ -4,117 +4,171 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Happy Birthday Dhanabells!</title>
+    <link href="https://fonts.googleapis.com/css2?family=Great+Vibes&family=Montserrat:wght@300&display=swap" rel="stylesheet">
     <style>
+        :root {
+            --primary-blue: #a0d8ff;
+            --deep-blue: #05192d;
+            --glow-blue: #82ccff;
+        }
+
         body {
             margin: 0;
             display: flex;
             justify-content: center;
             align-items: center;
             min-height: 100vh;
-            background: #05192d;
+            /* Starry Deep Blue Gradient */
             background: radial-gradient(circle at center, #103a61 0%, #05192d 100%);
-            font-family: 'Poppins', sans-serif;
+            font-family: 'Great Vibes', cursive;
             overflow: hidden;
             color: white;
         }
 
+        /* Ambient Sparkles Background */
+        body::after {
+            content: "";
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            background-image: radial-gradient(white 1px, transparent 1px);
+            background-size: 50px 50px;
+            opacity: 0.1;
+            z-index: 1;
+        }
+
         .card {
-            background: rgba(255, 255, 255, 0.05);
-            backdrop-filter: blur(20px);
-            padding: 40px;
-            border-radius: 40px;
+            /* Frosted Glass Effect */
+            background: rgba(255, 255, 255, 0.03);
+            backdrop-filter: blur(25px);
+            -webkit-backdrop-filter: blur(25px);
+            padding: 50px 30px;
+            border-radius: 50px;
             text-align: center;
             border: 1px solid rgba(160, 216, 255, 0.2);
-            box-shadow: 0 30px 60px rgba(0,0,0,0.5);
+            box-shadow: 0 40px 100px rgba(0,0,0,0.6), 
+                        inset 0 0 20px rgba(160, 216, 255, 0.1);
             width: 320px;
             z-index: 5;
             position: relative;
+            animation: float 6s ease-in-out infinite;
         }
 
-        h1 { font-size: 1.8rem; color: #a0d8ff; margin-bottom: 5px; }
-        #status-text { font-size: 0.9rem; color: #82ccff; margin-bottom: 25px; display: block; }
+        @keyframes float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
 
+        h1 { 
+            font-size: 3.8rem; 
+            margin: 0 0 15px 0;
+            color: #ffffff;
+            text-shadow: 0 0 15px var(--glow-blue), 0 0 30px rgba(130, 204, 255, 0.3);
+            letter-spacing: 2px;
+        }
+
+        #status-text { 
+            font-family: 'Montserrat', sans-serif;
+            font-size: 0.9rem; 
+            color: var(--primary-blue);
+            text-transform: uppercase;
+            letter-spacing: 4px;
+            display: block; 
+            margin-bottom: 25px;
+            opacity: 0.8;
+        }
+
+        /* --- SOFT GLOWING BUTTON --- */
         .btn {
-            background: linear-gradient(135deg, #4682b4, #82ccff);
+            background: rgba(160, 216, 255, 0.15);
+            backdrop-filter: blur(10px);
             color: white;
-            border: none;
-            padding: 15px 25px;
-            font-size: 1rem;
-            border-radius: 50px;
+            border: 1px solid var(--primary-blue);
+            padding: 12px 35px;
+            font-size: 1.5rem;
+            border-radius: 100px;
             cursor: pointer;
-            box-shadow: 0 10px 20px rgba(0,0,0,0.3);
-            font-weight: bold;
+            box-shadow: 0 0 20px rgba(160, 216, 255, 0.2);
             position: fixed;
             z-index: 100;
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
         }
 
-        /* Container for the Cake Image */
+        .btn:hover {
+            background: rgba(160, 216, 255, 0.3);
+            box-shadow: 0 0 30px rgba(160, 216, 255, 0.5);
+            transform: scale(1.1);
+        }
+
         #cake-container {
             display: none;
             position: relative;
             width: 100%;
-            min-height: 200px; /* Ensure space for the image */
             cursor: crosshair;
         }
 
         .kawaii-cake {
             width: 100%;
             height: auto;
-            display: block;
-            border-radius: 20px;
-            filter: drop-shadow(0 0 10px rgba(160, 216, 255, 0.3));
+            border-radius: 30px;
+            filter: drop-shadow(0 0 20px rgba(160, 216, 255, 0.3));
+            transition: transform 0.3s ease;
         }
 
         .candle {
             position: absolute;
-            font-size: 2rem;
+            font-size: 2.2rem;
             transform: translate(-50%, -100%);
             z-index: 10;
-            animation: popIn 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-            filter: drop-shadow(0 0 8px #ffbd39);
+            filter: drop-shadow(0 0 10px gold);
+            animation: popIn 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
         }
 
         #final-photo {
             display: none;
-            width: 240px;
-            border-radius: 25px;
-            border: 4px solid #a0d8ff;
+            width: 260px;
+            border-radius: 40px;
+            border: 2px solid rgba(160, 216, 255, 0.5);
             margin-top: 15px;
-            box-shadow: 0 0 30px rgba(160, 216, 255, 0.4);
+            box-shadow: 0 0 50px rgba(160, 216, 255, 0.4);
+            object-fit: cover;
         }
 
+        /* Aesthetic Floating Particles */
         .floating-element {
             position: absolute;
             pointer-events: none;
             z-index: 10;
-            animation: floatUp 4s linear forwards;
+            animation: floatUp 5s ease-in forwards;
         }
 
         @keyframes floatUp {
-            to { transform: translateY(-120vh) rotate(360deg); opacity: 0; }
+            0% { transform: translateY(0) rotate(0deg) scale(0.5); opacity: 0; }
+            20% { opacity: 0.8; }
+            100% { transform: translateY(-120vh) rotate(360deg) scale(1.2); opacity: 0; }
         }
 
         @keyframes popIn {
-            from { transform: scale(0); opacity: 0; }
-            to { transform: scale(1); opacity: 1; }
+            from { transform: translate(-50%, -100%) scale(0); opacity: 0; }
+            to { transform: translate(-50%, -100%) scale(1); opacity: 1; }
         }
     </style>
 </head>
 <body>
 
     <div class="card" id="mainCard">
-        <h1 id="title">Catch the Gift! 🎁</h1>
+        <h1 id="title">HBD!</h1>
         <span id="status-text">Tap the button 20 times...</span>
         
         <div id="cake-container" onclick="placeCandle(event)">
-            <img src="cake.jpg" class="kawaii-cake" id="cakeImg">
+            <img src="Cake.jpg" class="kawaii-cake" id="cakeImg">
             <div id="candle-layer"></div>
         </div>
 
         <img src="IMG_20260312_071341.jpg" id="final-photo">
     </div>
 
-    <button class="btn" id="targetBtn" onclick="handleTap()">TAP DHANABELLS 🎉</button>
+    <button class="btn" id="targetBtn" onclick="handleTap()">Tap Me ✨</button>
 
     <script>
         let tapCount = 20;
@@ -124,17 +178,15 @@
         const cakeContainer = document.getElementById('cake-container');
         const candleLayer = document.getElementById('candle-layer');
         const finalPhoto = document.getElementById('final-photo');
-        
-        // Final surprise photo source
         const photoSource = "IMG_20260312_071341.jpg";
 
         window.onload = () => {
             btn.style.left = (window.innerWidth / 2 - btn.offsetWidth / 2) + 'px';
-            btn.style.top = (window.innerHeight / 2 + 130) + 'px';
+            btn.style.top = (window.innerHeight / 2 + 150) + 'px';
         };
 
         function moveButton() {
-            const margin = 80; 
+            const margin = 100; 
             const maxX = window.innerWidth - btn.offsetWidth - margin;
             const maxY = window.innerHeight - btn.offsetHeight - margin;
             btn.style.left = Math.max(margin, Math.random() * maxX) + 'px';
@@ -144,7 +196,7 @@
         function handleTap() {
             tapCount--;
             if (tapCount > 0) {
-                statusText.innerText = `Keep going! ${tapCount} left...`;
+                statusText.innerText = `Almost there... ${tapCount}`;
                 moveButton();
             } else {
                 startCakePhase();
@@ -153,8 +205,8 @@
 
         function startCakePhase() {
             btn.style.display = 'none';
-            document.getElementById('title').innerText = "Make a Wish! 🕯️";
-            statusText.innerText = "Tap on the cake to light 5 candles!";
+            document.getElementById('title').innerText = "Make a Wish";
+            statusText.innerText = "Light the 5 candles";
             cakeContainer.style.display = 'block';
         }
 
@@ -179,38 +231,40 @@
         }
 
         function revealFinalSurprise() {
-            document.getElementById('title').innerText = "HAPPY BIRTHDAY!";
-            statusText.style.display = 'none';
+            document.getElementById('title').innerText = "Happy Birthday";
+            statusText.innerText = "Dhanabells";
             cakeContainer.style.display = 'none';
             finalPhoto.style.display = 'inline-block';
             
-            for(let i=0; i<50; i++) {
-                setTimeout(createCelebration, i * 150);
+            for(let i=0; i<60; i++) {
+                setTimeout(createCelebration, i * 120);
             }
         }
 
         function createCelebration() {
-            const isPhoto = Math.random() > 0.4;
+            const isPhoto = Math.random() > 0.45;
             const el = isPhoto ? document.createElement('img') : document.createElement('div');
             
             if (isPhoto) {
                 el.src = photoSource;
-                el.style.width = (Math.random() * 40 + 70) + 'px';
+                el.style.width = (Math.random() * 60 + 80) + 'px';
                 el.style.height = el.style.width;
-                el.style.borderRadius = '15px';
-                el.style.border = '2px solid white';
+                el.style.borderRadius = '30px';
+                el.style.border = '2px solid rgba(255,255,255,0.8)';
                 el.style.objectFit = 'cover';
+                el.style.boxShadow = '0 10px 20px rgba(0,0,0,0.3)';
             } else {
-                el.innerText = ["💙", "✨", "🎉", "💎", "🌸"][Math.floor(Math.random() * 4)];
-                el.style.fontSize = '24px';
+                // Aesthetic blue elements
+                const items = ["💙", "✨", "❄️", "💎", "🦋"];
+                el.innerText = items[Math.floor(Math.random() * items.length)];
+                el.style.fontSize = (Math.random() * 20 + 20) + 'px';
             }
 
             el.className = 'floating-element';
             el.style.left = Math.random() * 95 + 'vw';
             el.style.bottom = '-100px';
-            el.style.animation = `floatUp ${Math.random() * 2 + 3}s linear forwards`;
             document.body.appendChild(el);
-            setTimeout(() => el.remove(), 5000);
+            setTimeout(() => el.remove(), 5500);
         }
     </script>
 </body>
