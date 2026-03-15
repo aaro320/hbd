@@ -65,7 +65,7 @@
             margin: 0 0 10px 0;
             color: #ffffff;
             text-shadow: 0 0 15px var(--glow-blue);
-            min-height: 4.5rem; /* Prevents card jumping during typing */
+            min-height: 4.5rem;
         }
 
         #status-text { 
@@ -96,6 +96,16 @@
             transform: translate(-50%, -50%);
             opacity: 0;
             animation: fadeInBtn 0.8s ease forwards 0.5s, breathe 2.5s infinite ease-in-out;
+        }
+
+        #retryBtn {
+            position: static;
+            transform: none;
+            display: none;
+            margin-top: 20px;
+            animation: fadeInBtn 1s ease forwards;
+            font-size: 1.2rem;
+            padding: 8px 25px;
         }
 
         @keyframes fadeInBtn { from { opacity: 0; } to { opacity: 1; } }
@@ -155,6 +165,10 @@
 </head>
 <body>
 
+    <audio id="bdayMusic" loop>
+        <source src="music.mp3" type="audio/mpeg">
+    </audio>
+
     <div class="card" id="mainCard">
         <div id="setup-content">
             <h1 id="intro-title"></h1>
@@ -166,6 +180,7 @@
             <h1 id="final-hbd" style="font-size: 3rem; margin-top: 15px;"></h1>
             <span id="final-name" style="font-family:'Montserrat'; letter-spacing: 5px; color:#a0d8ff;"></span>
             <div id="birthday-message"></div>
+            <button class="btn" id="retryBtn" onclick="restartGame()">See Again ✨</button>
         </div>
     </div>
 
@@ -174,8 +189,8 @@
     <script>
         const photoList = ["d.jpg", "1773573887613.jpg", "1773573884038.jpg", "1773573881975.jpg", "1773573879293.jpg", "final.jpg"];
         let tapCount = 20;
+        const music = document.getElementById('bdayMusic');
 
-        // Typing function
         function typeWriter(elementId, text, speed = 100) {
             let i = 0;
             const element = document.getElementById(elementId);
@@ -195,14 +210,18 @@
         }
 
         window.onload = async () => {
+            initGame();
+        };
+
+        async function initGame() {
             const btn = document.getElementById('targetBtn');
+            btn.style.display = 'block';
             btn.style.left = (window.innerWidth / 2 - btn.offsetWidth / 2) + 'px';
             btn.style.top = (window.innerHeight / 2 + 150) + 'px';
             
-            // Start initial typing
             await typeWriter('intro-title', 'HBD! ✨');
             typeWriter('status-text', 'Unlock the magic (20 taps)', 50);
-        };
+        }
 
         function moveButton() {
             const btn = document.getElementById('targetBtn');
@@ -213,10 +232,13 @@
             const newY = Math.max(margin, Math.random() * maxY);
             btn.style.left = newX + 'px';
             btn.style.top = newY + 'px';
-            btn.style.transform = "scale(1)"; 
+            btn.style.transform = "translate(0,0) scale(1)"; 
         }
 
         function handleTap() {
+            // Start music on first tap
+            if (tapCount === 20) music.play().catch(e => console.log("Music blocked"));
+
             tapCount--;
             const status = document.getElementById('status-text');
             if (tapCount > 0) {
@@ -248,13 +270,23 @@
         }
 
         async function startCelebration() {
-            // Typing the final greetings
             await typeWriter('final-hbd', 'Happy Birthday', 100);
             await typeWriter('final-name', 'DHANABELLS', 150);
-            typeWriter('birthday-message', 'May your day be as radiant as your smile.\nYou are cherished.', 50);
+            await typeWriter('birthday-message', 'wala lang, tanda mo na sis \nHAHAHAH', 50);
+            
+            // Show retry button after typing
+            document.getElementById('retryBtn').style.display = 'inline-block';
 
             for(let i=0; i<100; i++) setTimeout(createConfetti, i * 20);
             for(let i=0; i<60; i++) setTimeout(createFloatingElement, i * 150);
+        }
+
+        function restartGame() {
+            tapCount = 20;
+            document.getElementById('birthday-content').style.display = 'none';
+            document.getElementById('setup-content').style.display = 'block';
+            document.getElementById('retryBtn').style.display = 'none';
+            initGame();
         }
 
         function createConfetti() {
