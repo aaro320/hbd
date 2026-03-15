@@ -180,11 +180,11 @@
             <h1 id="final-hbd" style="font-size: 3rem; margin-top: 15px;"></h1>
             <span id="final-name" style="font-family:'Montserrat'; letter-spacing: 5px; color:#a0d8ff;"></span>
             <div id="birthday-message"></div>
-            <button class="btn" id="retryBtn" onclick="restartGame()">See Again ✨</button>
+            <button class="btn" id="retryBtn" onclick="restartGame()">See Again</button>
         </div>
     </div>
 
-    <button class="btn" id="targetBtn" onclick="handleTap()">Tap Me ✨</button>
+    <button class="btn" id="targetBtn" onclick="handleTap()">Tap Me </button>
 
     <script>
         const photoList = ["d.jpg", "1773573887613.jpg", "1773573884038.jpg", "1773573881975.jpg", "1773573879293.jpg", "final.jpg"];
@@ -219,7 +219,7 @@
             btn.style.left = (window.innerWidth / 2 - btn.offsetWidth / 2) + 'px';
             btn.style.top = (window.innerHeight / 2 + 150) + 'px';
             
-            await typeWriter('intro-title', 'HBD! ✨');
+            await typeWriter('intro-title', 'HBD!');
             typeWriter('status-text', 'Unlock the magic (20 taps)', 50);
         }
 
@@ -311,7 +311,7 @@
                 el.style.border = '2px solid rgba(255,255,255,0.8)';
                 el.style.objectFit = 'cover';
             } else {
-                const items = ["💙", "✨", "💎", "🦋", "🌸"];
+                const items = ["💙", "^⁠_⁠^", "💎", "🦋", "🌸"];
                 el.innerText = items[Math.floor(Math.random() * items.length)];
                 el.style.fontSize = (Math.random() * 20 + 20) + 'px';
             }
